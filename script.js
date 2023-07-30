@@ -16,10 +16,12 @@ function buttonClick(value) {
 
 function handleSymbol(symbol) {
   switch (symbol) {
+    case "Delete":
     case "C":
       buffer = "0";
       runningTotal = 0;
       break;
+    case "Enter":
     case "=":
       if (previousOperator === null) {
         return;
@@ -28,6 +30,7 @@ function handleSymbol(symbol) {
       buffer = runningTotal;
       runningTotal = 0;
       break;
+    case "Backspace":
     case "←":
       if (buffer.length === 1) {
         buffer = "0";
@@ -35,6 +38,9 @@ function handleSymbol(symbol) {
         buffer = buffer.substring(0, buffer.length - 1);
       }
       break;
+    case "*":
+    case "/":
+    case "-":
     case "+":
     case "−":
     case "×":
@@ -64,11 +70,11 @@ function handleMath(symbol) {
 function flushOperation(intBuffer) {
   if (previousOperator === "+") {
     runningTotal += intBuffer;
-  } else if (previousOperator === "−") {
+  } else if (previousOperator === "−" || previousOperator === "-") {
     runningTotal -= intBuffer;
-  } else if (previousOperator === "×") {
+  } else if (previousOperator === "×" || previousOperator === "*") {
     runningTotal *= intBuffer;
-  } else if (previousOperator === "÷") {
+  } else if (previousOperator === "÷" || previousOperator === "/") {
     runningTotal /= intBuffer;
   }
 }
@@ -87,6 +93,11 @@ function init() {
     .addEventListener("click", function (event) {
       buttonClick(event.target.innerText);
     });
+
+  document.querySelector("body").addEventListener("keydown", function (event) {
+    buttonClick(event.key);
+    // console.log(event.key);
+  });
 }
 
 init();
